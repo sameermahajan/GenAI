@@ -8,4 +8,4 @@ loader = ConfluenceLoader(
     api_key="<my token>"
 )
 # space id should not be the display name
-documents = loader.load(space_key="<space id>", limit=50)
+documents = loader.load(space_key="<space id>", include_attachments=True, limit=50)
