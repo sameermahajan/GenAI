@@ -1,4 +1,4 @@
-# Frmaeworks for serving LLMs
+# Frameworks for serving LLMs
 
 - [lorax](https://github.com/predibase/lorax) employs a number of optimization techniques like
    + kv caching
