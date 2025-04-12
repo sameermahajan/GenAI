@@ -1,0 +1,30 @@
+# Structured Output with outlines
+# beyond JSON
+
+import warnings
+warnings.filterwarnings('ignore')
+
+import outlines
+from outlines.samplers import greedy
+
+model_name = "HuggingFaceTB/SmolLM2-135M-Instruct"
+model = outlines.models.transformers(model_name)
+
+phone_prompt = """
+Extract the phone number from the example,
+please use the format: (XXX) XXX-XXXX
+
+206-555-1234
+
+"""
+
+phone_regex = r'\([0-9]{3}\) [0-9]{3}-[0-9]{4}'
+
+phone_generator = outlines.generate.regex(
+    model, 
+    phone_regex,
+    sampler=greedy()
+)
+
+phone_number = phone_generator(phone_prompt)
+print (phone_number)
