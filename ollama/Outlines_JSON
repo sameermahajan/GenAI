@@ -1,0 +1,68 @@
+# Structured Output using Outlines (JSON)
+
+import warnings
+warnings.filterwarnings('ignore')
+
+from openai import OpenAI
+
+client = OpenAI(
+    base_url = 'http://localhost:11434/v1',
+    api_key='ollama', # required, but unused
+)
+
+from pydantic import BaseModel
+from pydantic import Field
+from datetime import date
+from typing import List
+
+# Person only has a name, but we can easily extend it with other fields
+class Person(BaseModel):
+    name: str
+
+class CalendarEvent(BaseModel):
+    name: str
+    
+    # not supported by OpenAI. We want a format like 2025-01-30
+    date: date 
+    participants: List[Person]
+
+    address_number: str
+    street_name: str
+    city_name: str
+
+    # Inline regex patterns not supported by OpenAI restrict state code 
+    # to be two capital letters (OpenAI does not support pattern fields)
+    state_code: str = Field(pattern=r'[A-Z]{2}')
+
+    # Zip code must be five digits
+    zip_code: str = Field(pattern=r'\d{5}') 
+
+event_description = """
+Sameer and Shivali are going to a science fair on Friday, January 2024.
+The science fair is hosted at the gymnasium of Hazeldale Elementary
+School at 20080 SW Farmington Road in Beaverton Oregon.
+"""
+
+system_prompt = """
+Make a calendar event. Respond in JSON with
+the event name, date, list of participants,
+and the address.
+"""
+
+user_prompt = 'Event description: ' + event_description
+
+import outlines
+from outlines.samplers import greedy
+
+model_name = "HuggingFaceTB/SmolLM2-135M-Instruct"
+model = outlines.models.transformers(model_name)
+
+generator = outlines.generate.json(
+    model, 
+    CalendarEvent,
+    sampler = outlines.samplers.greedy()
+)
+
+event = generator(user_prompt)
+
+print (event)
