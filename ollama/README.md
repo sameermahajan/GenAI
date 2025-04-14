@@ -1,3 +1,3 @@
-https://youtu.be/-TXPG-KbQhk
+Structured LLM Output https://youtu.be/-TXPG-KbQhk
 
-https://youtu.be/IGox9gOCtwU
+Hosting models locally using Ollama https://youtu.be/IGox9gOCtwU
