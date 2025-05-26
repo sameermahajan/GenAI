@@ -30,36 +30,17 @@ class MCP_ChatBot:
         process_query = True
         while process_query:
             print(response.choices[0].message.tool_calls)
-            assistant_content = []
             tool_calls = response.choices[0].message.tool_calls
             for tool_call in tool_calls:
-                # assistant_content.append(content)
-                # messages.append({'role':'assistant', 'content':assistant_content})
-                tool_id = tool_call.id
                 tool_args = eval(tool_call.function.arguments)
-                print("type of tool_args is ", type(tool_args), "\n")
                 tool_name = tool_call.function.name
                 print(f"Calling tool {tool_name} with args {tool_args}")
                 # Call a tool
-                #result = execute_tool(tool_name, tool_args)
                 result = await self.session.call_tool(tool_name, arguments=tool_args)
                 print("made tool call\n")
                 print("tool result is ", result)
-                # messages.append({"role": "user", 
-                #                      "content": [
-                #                          {
-                #                              "type": "tool_result",
-                #                              "tool_use_id":tool_id,
-                #                              "content": result.model_dump_json()
-                #                          }
-                #                      ]
-                #                    })
-                # response = self.client.chat.completions.create(max_tokens = 2024,
-                #                      model = 'qwen2.5-coder:32b', 
-                #                      tools = self.available_tools,
-                #                      messages = messages) 
-                # print(response.choices[0].message.content)
-    
+            process_query = False
+
     async def chat_loop(self):
         """Run an interactive chat loop"""
         print("\nMCP Chatbot Started!")
@@ -114,5 +95,9 @@ async def main():
 if __name__ == "__main__":
     asyncio.run(main())
 
+# Try following queries
+#
 # search_papers on topic MCP
 # search_papers on topic MCP with max_results of 2
+
+# extract_info for paper_id 2504.08999v1
