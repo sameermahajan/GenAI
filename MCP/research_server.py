@@ -190,3 +190,6 @@ Please present both detailed information about each paper and a high-level synth
 if __name__ == "__main__":
     # Initialize and run the server
     mcp.run(transport='stdio')
+    # for remote server use
+    # mcp.run(transport='sse')
+    # push it to GitHub repo and deploy using render
