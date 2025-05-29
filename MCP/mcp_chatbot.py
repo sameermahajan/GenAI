@@ -114,15 +114,27 @@ class MCP_ChatBot:
             assistant_content = []
             tool_calls = response.choices[0].message.tool_calls
             if tool_calls:
+                content = response.choices[0].message.content
+                assistant_content.append(content)
+                messages.append({'role':'assistant', 'content':assistant_content})
                 for tool_call in tool_calls:
                     tool_args = eval(tool_call.function.arguments)
                     tool_name = tool_call.function.name
                     print(f"Calling tool {tool_name} with args {tool_args}")
-                    # Call a tool
-                    session = self.tool_to_session[tool_name] # new
-                    result = await session.call_tool(tool_name, arguments=tool_args)
+                    # Call a tool                    
+                    result = await self.sessions[tool_name].call_tool(tool_name, arguments=tool_args)
                     print("made tool call\n")
                     print("tool result is ", result)
+                    messages.append({
+                        "role": "user", 
+                        "content": [
+                            {
+                                "type": "tool_result",
+                                "tool_use_id": tool_call.id,
+                                "content": result
+                            }
+                        ]
+                    })
                 process_query = False
             else:
                 content = response.choices[0].message.content
@@ -168,3 +180,5 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+
+# search_papers on topic MCP and call write_file with results 
