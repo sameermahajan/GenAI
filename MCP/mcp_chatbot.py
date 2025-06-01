@@ -181,4 +181,6 @@ async def main():
 if __name__ == "__main__":
     asyncio.run(main())
 
+# call tool list_directory with path .
+# call tool write_file with path new_file content 'This is new file'
 # search_papers on topic MCP and call write_file with results 
