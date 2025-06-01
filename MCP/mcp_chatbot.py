@@ -183,4 +183,4 @@ if __name__ == "__main__":
 
 # call tool list_directory with path .
 # call tool write_file with path new_file content 'This is new file'
-# search_papers on topic MCP and call write_file with results 
+# call tool search_papers with topic MCP and then call tool write_file with path new_file and content as result of search_papers
